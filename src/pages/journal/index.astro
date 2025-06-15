@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import HorizontalJournal from '../../components/HorizontalJournal.astro';
+---
+
+<Base title="Creative Leadership Journal - Aaron Steele Brown" 
+      description="Longform insights on design strategy, team leadership, and multidisciplinary creative practice from Aaron Steele Brown.">
+  <Header />
+  
+  <main class="pt-16">
+    <HorizontalJournal />
+  </main>
+</Base>
+
+<style>
+  /* Ensure full viewport height for horizontal scroll */
+  main {
+    height: calc(100vh - 4rem); /* Account for header height */
+  }
+</style>

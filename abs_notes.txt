@@ -1,0 +1,7 @@
+-- extract 'feature request' prompt from Every video
+-- set up Kanban board view in github
+-- make blog landing page look like french guy
+-- file bug reports on:
+-- -- homepage right aligned content
+-- -- theme toggle doesn't do anything
+-- -- fonts are incorrect

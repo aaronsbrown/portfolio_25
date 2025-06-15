@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import JournalTile from './JournalTile.astro';
+
+const journalPosts = await getCollection('journal');
+const sortedPosts = journalPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<section class="horizontal-journal min-h-screen overflow-hidden">
+  <!-- Horizontal Scroll Container -->
+  <div class="scroll-container h-screen overflow-x-auto overflow-y-hidden">
+    <div class="flex h-full">
+      <!-- Welcome/Intro Tile -->
+      <div class="flex-none w-screen h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border-r border-neutral-300 dark:border-neutral-600">
+        <div class="max-w-2xl px-8 text-center">
+          <h1 class="font-grotesk text-5xl md:text-7xl font-bold mb-6 text-brutalist">
+            Creative Leadership Journal
+          </h1>
+          <p class="font-grotesk text-xl md:text-2xl text-neutral-600 dark:text-neutral-400 mb-8">
+            Longform insights on design strategy, team leadership, and multidisciplinary creative practice.
+          </p>
+          <div class="flex justify-center space-x-4">
+            <span class="font-grotesk text-sm uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+              Scroll horizontally to explore →
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journal Post Tiles -->
+      {sortedPosts.map((post, index) => (
+        <JournalTile 
+          post={post} 
+          index={index}
+          isFirst={index === 0}
+          isLast={index === sortedPosts.length - 1}
+        />
+      ))}
+
+      <!-- About/Contact Tile -->
+      <div class="flex-none w-screen h-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center border-l border-neutral-300 dark:border-neutral-600">
+        <div class="max-w-2xl px-8 text-center">
+          <h2 class="font-grotesk text-4xl md:text-6xl font-bold mb-6 text-brutalist">
+            Aaron Steele Brown
+          </h2>
+          <p class="font-grotesk text-lg md:text-xl text-neutral-600 dark:text-neutral-400 mb-8">
+            Creative executive with 15+ years leading multidisciplinary design teams and driving strategic creative initiatives.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="mailto:hello@aaronsteelebrown.com" 
+               class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+              Contact
+            </a>
+            <a href="https://linkedin.com/in/aaronsteelebrown" 
+               class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .scroll-container {
+    /* Smooth horizontal scrolling */
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  }
+  
+  .scroll-container::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+
+  /* Custom scroll snap for better UX */
+  .scroll-container {
+    scroll-snap-type: x mandatory;
+  }
+
+  .scroll-container > div > div {
+    scroll-snap-align: start;
+  }
+
+  /* Mobile adaptations */
+  @media (max-width: 768px) {
+    .scroll-container {
+      scroll-snap-type: x proximity; /* Less aggressive snapping on mobile */
+    }
+  }
+</style>
+
+<script>
+  // Enhanced horizontal scroll handling
+  const scrollContainer = document.querySelector('.scroll-container');
+  
+  if (scrollContainer) {
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        scrollContainer.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+      } else if (e.key === 'ArrowRight') {
+        scrollContainer.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+      }
+    });
+
+    // Touch/wheel handling for better mobile/trackpad experience
+    let isScrolling = false;
+    
+    scrollContainer.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        // Already horizontal scroll, let it happen naturally
+        return;
+      }
+      
+      // Convert vertical scroll to horizontal
+      e.preventDefault();
+      scrollContainer.scrollBy({ left: e.deltaY * 2, behavior: 'smooth' });
+    }, { passive: false });
+  }
+</script>
