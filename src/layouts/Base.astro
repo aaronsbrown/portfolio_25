@@ -1,0 +1,90 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Aaron Steele Brown - Creative Technologist" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style is:global>
+      @import "../styles/global.css";
+    </style>
+  </head>
+  <body class="bg-white dark:bg-black text-black dark:text-white transition-colors duration-300 ease-in-out font-inter antialiased">
+    <slot />
+    
+    <!-- CRT grain overlay -->
+    <div class="crt-overlay"></div>
+    
+    <script>
+      // Theme toggle functionality
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+
+      window.localStorage.setItem('theme', theme);
+    </script>
+    
+    <style>
+      .crt-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0.03;
+        z-index: 9999;
+        background-image: 
+          radial-gradient(circle, transparent 1px, rgba(255, 255, 255, 0.15) 1px);
+        background-size: 4px 4px;
+        animation: grain 8s steps(10) infinite;
+      }
+      
+      @keyframes grain {
+        0%, 100% { transform: translate(0, 0) }
+        10% { transform: translate(-5%, -10%) }
+        20% { transform: translate(-15%, 5%) }
+        30% { transform: translate(7%, -25%) }
+        40% { transform: translate(-5%, 25%) }
+        50% { transform: translate(-15%, 10%) }
+        60% { transform: translate(15%, 0%) }
+        70% { transform: translate(0%, 15%) }
+        80% { transform: translate(3%, 35%) }
+        90% { transform: translate(-10%, 10%) }
+      }
+      
+      .dark .crt-overlay {
+        background-image: 
+          radial-gradient(circle, transparent 1px, rgba(0, 0, 0, 0.15) 1px);
+      }
+    </style>
+  </body>
+</html>

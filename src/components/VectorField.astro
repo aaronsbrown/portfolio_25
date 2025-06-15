@@ -1,0 +1,91 @@
+---
+---
+
+<div class="vector-field-container relative w-full h-64 overflow-hidden">
+  <canvas id="vector-field" class="absolute inset-0 w-full h-full opacity-20"></canvas>
+</div>
+
+<script>
+  const canvas = document.getElementById('vector-field') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  
+  if (canvas && ctx) {
+    let animationId: number;
+    let time = 0;
+    
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    
+    function drawVectorField() {
+      if (!ctx || !canvas) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+      ctx.lineWidth = 1;
+      
+      const spacing = 40;
+      const amplitude = 20;
+      
+      for (let x = 0; x < canvas.width / window.devicePixelRatio; x += spacing) {
+        for (let y = 0; y < canvas.height / window.devicePixelRatio; y += spacing) {
+          const angle = Math.sin(x * 0.01 + time * 0.001) + Math.cos(y * 0.01 + time * 0.001);
+          const length = Math.sin(time * 0.002 + x * 0.01 + y * 0.01) * amplitude;
+          
+          const endX = x + Math.cos(angle) * length;
+          const endY = y + Math.sin(angle) * length;
+          
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+          
+          // Add small dot at the end
+          ctx.beginPath();
+          ctx.arc(endX, endY, 1, 0, Math.PI * 2);
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fill();
+        }
+      }
+      
+      time++;
+      animationId = requestAnimationFrame(drawVectorField);
+    }
+    
+    function init() {
+      resizeCanvas();
+      drawVectorField();
+    }
+    
+    // Initialize
+    init();
+    
+    // Handle resize
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+    });
+    
+    // Handle theme changes
+    const observer = new MutationObserver(() => {
+      // Redraw with new colors when theme changes
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      observer.disconnect();
+    });
+  }
+</script>

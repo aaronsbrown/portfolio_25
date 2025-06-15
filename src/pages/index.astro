@@ -1,16 +1,158 @@
 ---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import VectorField from '../components/VectorField.astro';
+import { getCollection } from 'astro:content';
 
+const blogPosts = await getCollection('blog');
+const featuredPosts = blogPosts
+  .filter(post => post.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const latestPosts = blogPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="Aaron Steele Brown - Creative Technologist">
+  <Header />
+  
+  <main class="pt-16">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center">
+      <VectorField />
+      
+      <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
+        <h1 class="font-mono text-6xl md:text-8xl font-bold mb-6 tracking-tight">
+          Aaron Steele Brown
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+          Creative Technologist exploring the intersection of art, systems, and digital craftsmanship
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/blog" class="inline-block bg-black dark:bg-white text-white dark:text-black px-8 py-3 font-mono text-sm uppercase tracking-wide hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
+            Read My Work
+          </a>
+          <a href="#about" class="inline-block border border-black dark:border-white text-black dark:text-white px-8 py-3 font-mono text-sm uppercase tracking-wide hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">
+            Learn More
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <h2 class="font-mono text-3xl font-bold mb-6 uppercase tracking-wide">
+              About
+            </h2>
+            <div class="prose prose-lg max-w-none text-gray-700 dark:text-gray-300">
+              <p>
+                I work at the intersection of art, technology, and systems thinking, 
+                creating digital experiences that bridge the gap between human intuition 
+                and computational logic.
+              </p>
+              <p>
+                My practice combines Bauhaus modularity with Brutalist clarity, 
+                analog imperfection with digital precision, exploring how generative 
+                systems can create meaningful expressions of creative intent.
+              </p>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="font-mono text-xl font-bold mb-4 uppercase tracking-wide">
+              Current Focus
+            </h3>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+              <li>• Generative art systems</li>
+              <li>• Creative coding environments</li>
+              <li>• Systems thinking in design</li>
+              <li>• Analog aesthetics in digital media</li>
+            </ul>
+            
+            <div class="mt-8">
+              <p class="font-mono text-sm uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">
+                Status
+              </p>
+              <p class="text-green-600 dark:text-green-400">
+                Available for collaboration
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Writing -->
+    <section class="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-end mb-12">
+          <h2 class="font-mono text-3xl font-bold uppercase tracking-wide">
+            Latest Writing
+          </h2>
+          <a href="/blog" class="font-mono text-sm uppercase tracking-wide hover:text-pink-500 transition-colors">
+            View All →
+          </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {latestPosts.map((post) => (
+            <article class="group">
+              <a href={`/blog/${post.slug}`} class="block">
+                <div class="mb-4">
+                  <time class="font-mono text-xs uppercase tracking-wide text-gray-500 dark:text-gray-500">
+                    {post.data.date.toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                <h3 class="font-mono text-xl font-bold mb-3 group-hover:text-pink-500 transition-colors">
+                  {post.data.title}
+                </h3>
+                {post.data.excerpt && (
+                  <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    {post.data.excerpt}
+                  </p>
+                )}
+                {post.data.tags && (
+                  <div class="flex flex-wrap gap-2">
+                    {post.data.tags.map((tag) => (
+                      <span class="font-mono text-xs uppercase tracking-wide px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-12 px-4 border-t border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <p class="font-mono text-sm text-gray-500 dark:text-gray-500">
+        © 2024 Aaron Steele Brown
+      </p>
+      <div class="flex space-x-6">
+        <a href="mailto:hello@aaronsteelebrown.com" class="font-mono text-sm hover:text-pink-500 transition-colors">
+          Email
+        </a>
+        <a href="https://github.com" class="font-mono text-sm hover:text-pink-500 transition-colors">
+          GitHub
+        </a>
+        <a href="https://linkedin.com" class="font-mono text-sm hover:text-pink-500 transition-colors">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </footer>
+</Base>
