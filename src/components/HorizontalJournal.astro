@@ -7,11 +7,13 @@ const sortedPosts = journalPosts.sort((a, b) => b.data.date.valueOf() - a.data.d
 ---
 
 <section class="horizontal-journal min-h-screen overflow-hidden">
-  <!-- Horizontal Scroll Container -->
-  <div class="scroll-container h-screen overflow-x-auto overflow-y-hidden">
-    <div class="flex h-full">
+  <!-- Desktop: Horizontal Scroll Container -->
+  <div class="hidden md:block scroll-container h-screen overflow-x-auto overflow-y-hidden relative z-10">
+    <div class="flex h-full infinite-scroll-content">
+      <!-- First set of tiles -->
+      <!-- First set of tiles -->
       <!-- Welcome/Intro Tile -->
-      <div class="flex-none w-screen h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border-r border-neutral-300 dark:border-neutral-600">
+      <div class="flex-none w-80 h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border-r border-neutral-300 dark:border-neutral-600">
         <div class="max-w-2xl px-8 text-center">
           <h1 class="font-grotesk text-5xl md:text-7xl font-bold mb-6 text-brutalist">
             Creative Leadership Journal
@@ -19,7 +21,7 @@ const sortedPosts = journalPosts.sort((a, b) => b.data.date.valueOf() - a.data.d
           <p class="font-grotesk text-xl md:text-2xl text-neutral-600 dark:text-neutral-400 mb-8">
             Longform insights on design strategy, team leadership, and multidisciplinary creative practice.
           </p>
-          <div class="flex justify-center space-x-4">
+          <div class="flex flex-col items-center space-y-4">
             <span class="font-grotesk text-sm uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
               Scroll horizontally to explore →
             </span>
@@ -38,7 +40,57 @@ const sortedPosts = journalPosts.sort((a, b) => b.data.date.valueOf() - a.data.d
       ))}
 
       <!-- About/Contact Tile -->
-      <div class="flex-none w-screen h-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center border-l border-neutral-300 dark:border-neutral-600">
+      <div class="flex-none w-80 h-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center border-l border-neutral-300 dark:border-neutral-600">
+        <div class="max-w-2xl px-8 text-center">
+          <h2 class="font-grotesk text-4xl md:text-6xl font-bold mb-6 text-brutalist">
+            Aaron Steele Brown
+          </h2>
+          <p class="font-grotesk text-lg md:text-xl text-neutral-600 dark:text-neutral-400 mb-8">
+            Creative executive with 15+ years leading multidisciplinary design teams and driving strategic creative initiatives.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="mailto:hello@aaronsteelebrown.com" 
+               class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+              Contact
+            </a>
+            <a href="https://linkedin.com/in/aaronsteelebrown" 
+               class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duplicate set for infinite loop -->
+      <!-- Welcome/Intro Tile (duplicate) -->
+      <div class="flex-none w-80 h-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border-r border-neutral-300 dark:border-neutral-600">
+        <div class="max-w-2xl px-8 text-center">
+          <h1 class="font-grotesk text-5xl md:text-7xl font-bold mb-6 text-brutalist">
+            Creative Leadership Journal
+          </h1>
+          <p class="font-grotesk text-xl md:text-2xl text-neutral-600 dark:text-neutral-400 mb-8">
+            Longform insights on design strategy, team leadership, and multidisciplinary creative practice.
+          </p>
+          <div class="flex flex-col items-center space-y-4">
+            <span class="font-grotesk text-sm uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+              Scroll horizontally to explore →
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journal Post Tiles (duplicate) -->
+      {sortedPosts.map((post, index) => (
+        <JournalTile 
+          post={post} 
+          index={index + sortedPosts.length}
+          isFirst={false}
+          isLast={false}
+        />
+      ))}
+
+      <!-- About/Contact Tile (duplicate) -->
+      <div class="flex-none w-80 h-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center border-l border-neutral-300 dark:border-neutral-600">
         <div class="max-w-2xl px-8 text-center">
           <h2 class="font-grotesk text-4xl md:text-6xl font-bold mb-6 text-brutalist">
             Aaron Steele Brown
@@ -60,63 +112,270 @@ const sortedPosts = journalPosts.sort((a, b) => b.data.date.valueOf() - a.data.d
       </div>
     </div>
   </div>
+
+  <!-- Mobile: Vertical Stack -->
+  <div class="md:hidden absolute inset-0 overflow-y-auto">
+    <!-- Welcome/Intro Section -->
+    <section class="min-h-screen bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center px-6 py-16">
+      <div class="max-w-lg text-center">
+        <h1 class="font-grotesk text-4xl font-bold mb-6 text-brutalist">
+          Creative Leadership Journal
+        </h1>
+        <p class="font-grotesk text-lg text-neutral-600 dark:text-neutral-400 mb-8">
+          Longform insights on design strategy, team leadership, and multidisciplinary creative practice.
+        </p>
+        <span class="font-grotesk text-sm uppercase tracking-wide text-neutral-500">
+          Scroll down to explore ↓
+        </span>
+      </div>
+    </section>
+
+    <!-- Journal Posts -->
+    {sortedPosts.map((post, index) => (
+      <section class="min-h-screen border-t border-neutral-300 dark:border-neutral-600 relative overflow-hidden">
+        <div class={`absolute inset-0 opacity-5 dark:opacity-10 ${index % 3 === 0 ? 'pattern-dots' : index % 3 === 1 ? 'pattern-lines' : 'pattern-grid'}`}></div>
+        <div class="relative z-10 h-full flex flex-col justify-between p-6 py-16">
+          <!-- Header -->
+          <header class="flex-none">
+            <time class="font-grotesk text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400 block mb-2">
+              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            <div class="flex items-center space-x-4 text-neutral-400 dark:text-neutral-500 mb-8">
+              <span class="font-grotesk text-xs uppercase tracking-wide">
+                {Math.ceil(post.body.split(' ').length / 200) || 5} min read
+              </span>
+              {post.data.tags && (
+                <span class="font-grotesk text-xs uppercase tracking-wide">
+                  #{post.data.tags[0]}
+                </span>
+              )}
+            </div>
+          </header>
+
+          <!-- Main Content -->
+          <main class="flex-1 flex flex-col justify-center">
+            <h1 class="font-grotesk text-3xl font-bold leading-tight mb-6 text-brutalist">
+              {post.data.title}
+            </h1>
+            
+            {post.data.excerpt && (
+              <p class="font-grotesk text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8">
+                {post.data.excerpt}
+              </p>
+            )}
+
+            <!-- CTA -->
+            <div class="flex flex-col gap-4">
+              <a href={`/journal/${post.slug}`} 
+                 class="inline-flex items-center justify-center font-grotesk text-sm uppercase tracking-wide px-6 py-3 bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 hover:bg-neutral-700 dark:hover:bg-neutral-300 transition-colors border border-neutral-900 dark:border-neutral-100">
+                Read Full Post
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </main>
+
+          <!-- Footer -->
+          <footer class="flex-none mt-8">
+            {post.data.tags && (
+              <div class="flex flex-wrap gap-2">
+                {post.data.tags.slice(0, 3).map((tag) => (
+                  <span class="font-grotesk text-xs uppercase tracking-wide px-3 py-1 bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-600">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </footer>
+        </div>
+      </section>
+    ))}
+
+    <!-- About/Contact Section -->
+    <section class="min-h-screen bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center border-t border-neutral-300 dark:border-neutral-600 px-6 py-16">
+      <div class="max-w-lg text-center">
+        <h2 class="font-grotesk text-4xl font-bold mb-6 text-brutalist">
+          Aaron Steele Brown
+        </h2>
+        <p class="font-grotesk text-lg text-neutral-600 dark:text-neutral-400 mb-8">
+          Creative executive with 15+ years leading multidisciplinary design teams and driving strategic creative initiatives.
+        </p>
+        <div class="flex flex-col gap-4">
+          <a href="mailto:hello@aaronsteelebrown.com" 
+             class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+            Contact
+          </a>
+          <a href="https://linkedin.com/in/aaronsteelebrown" 
+             class="font-grotesk text-sm uppercase tracking-wide px-6 py-3 border border-neutral-600 dark:border-neutral-400 hover:bg-neutral-600 hover:text-neutral-100 dark:hover:bg-neutral-400 dark:hover:text-neutral-900 transition-colors">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
 </section>
 
 <style>
   .scroll-container {
-    /* Smooth horizontal scrolling */
-    scroll-behavior: smooth;
+    /* Enable horizontal scrolling */
+    scroll-behavior: auto; /* Changed to auto for immediate response */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    overscroll-behavior-x: contain; /* Prevent scroll chaining */
   }
   
   .scroll-container::-webkit-scrollbar {
     display: none; /* WebKit */
   }
 
-  /* Custom scroll snap for better UX */
+  /* Ensure the container can actually scroll */
+  .horizontal-journal {
+    width: 100vw;
+  }
+  
+  @media (min-width: 768px) {
+    .horizontal-journal {
+      height: 100vh;
+    }
+  }
+
+  /* Temporarily disable scroll snap to test */
   .scroll-container {
-    scroll-snap-type: x mandatory;
+    /* scroll-snap-type: x proximity; */
   }
 
   .scroll-container > div > div {
-    scroll-snap-align: start;
+    /* scroll-snap-align: start; */
   }
 
-  /* Mobile adaptations */
-  @media (max-width: 768px) {
-    .scroll-container {
-      scroll-snap-type: x proximity; /* Less aggressive snapping on mobile */
-    }
+  /* Mobile pattern styles */
+  .pattern-dots::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+
+  .pattern-lines::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, currentColor 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+
+  .pattern-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 </style>
 
 <script>
-  // Enhanced horizontal scroll handling
-  const scrollContainer = document.querySelector('.scroll-container');
+  // Only run horizontal scroll logic on desktop
+  if (window.innerWidth >= 768) {
+    // Simplified horizontal scroll handling
+    const scrollContainer = document.querySelector('.scroll-container');
   
   if (scrollContainer) {
-    // Keyboard navigation
+    console.log('Scroll container found:', scrollContainer);
+    
+    // Check if content is actually scrollable
+    console.log('ScrollWidth:', scrollContainer.scrollWidth, 'ClientWidth:', scrollContainer.clientWidth);
+    
+    // Force a check after a short delay to ensure content is loaded
+    setTimeout(() => {
+      console.log('After delay - ScrollWidth:', scrollContainer.scrollWidth, 'ClientWidth:', scrollContainer.clientWidth);
+      const flexContainer = scrollContainer.querySelector('div.flex');
+      if (flexContainer) {
+        console.log('Flex container width:', flexContainer.scrollWidth);
+      }
+    }, 1000);
+
+    // Make container focusable for keyboard events
+    scrollContainer.setAttribute('tabindex', '0');
+    scrollContainer.focus();
+
+    // Keyboard navigation - full tile movement
     document.addEventListener('keydown', (e) => {
+      console.log('Key pressed:', e.key);
       if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         scrollContainer.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+        console.log('Arrow left pressed - scrolling left');
       } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
         scrollContainer.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+        console.log('Arrow right pressed - scrolling right');
       }
     });
 
-    // Touch/wheel handling for better mobile/trackpad experience
-    let isScrolling = false;
-    
+    // First let's get basic scrolling working again
     scrollContainer.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        // Already horizontal scroll, let it happen naturally
-        return;
-      }
-      
-      // Convert vertical scroll to horizontal
       e.preventDefault();
-      scrollContainer.scrollBy({ left: e.deltaY * 2, behavior: 'smooth' });
+      
+      // Further reduced speed for optimal control
+      const scrollAmount = (e.deltaY + e.deltaX) * 1.9; // Reduced another 20% (from 2.4 to 1.9)
+      
+      // Use direct scrollLeft assignment for immediate response
+      scrollContainer.scrollLeft += scrollAmount;
+      
     }, { passive: false });
+
+    // Infinite loop logic - calculate after content is loaded
+    setTimeout(() => {
+      const flexContainer = scrollContainer.querySelector('div.flex');
+      if (!flexContainer) return;
+      
+      const totalWidth = flexContainer.scrollWidth;
+      const singleSetWidth = totalWidth / 2; // We have exactly 2 sets of identical content
+      
+      console.log('Total width:', totalWidth, 'Single set width:', singleSetWidth);
+      
+      let isResetting = false;
+      
+      scrollContainer.addEventListener('scroll', () => {
+        if (isResetting) return;
+        
+        const currentScroll = scrollContainer.scrollLeft;
+        
+        // When scrolling right and we reach the end of the first set, 
+        // seamlessly jump to the beginning (which looks identical)
+        if (currentScroll >= singleSetWidth) {
+          console.log('End of first set reached, looping to start');
+          isResetting = true;
+          scrollContainer.scrollLeft = currentScroll - singleSetWidth;
+          setTimeout(() => isResetting = false, 50);
+        }
+        
+        // When scrolling left and we reach the beginning,
+        // jump to the equivalent position in the first set
+        if (currentScroll <= 0) {
+          console.log('Beginning reached, jumping to end of first set');
+          isResetting = true;
+          scrollContainer.scrollLeft = singleSetWidth - 10;
+          setTimeout(() => isResetting = false, 50);
+        }
+      });
+    }, 1000);
+  } else {
+    console.error('Scroll container not found');
+  }
   }
 </script>

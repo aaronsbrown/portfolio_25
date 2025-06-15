@@ -13,7 +13,7 @@ const readingTime = Math.ceil(post.body.split(' ').length / 200) || 5;
 const patternClass = index % 3 === 0 ? 'pattern-dots' : index % 3 === 1 ? 'pattern-lines' : 'pattern-grid';
 ---
 
-<article class={`journal-tile flex-none w-screen h-full relative overflow-hidden border-r border-neutral-300 dark:border-neutral-600 ${patternClass}`}>
+<article class={`journal-tile flex-none w-80 h-full relative overflow-hidden border-r border-neutral-300 dark:border-neutral-600 ${patternClass}`}>
   <!-- Background Pattern Layer -->
   <div class="absolute inset-0 opacity-5 dark:opacity-10"></div>
   
