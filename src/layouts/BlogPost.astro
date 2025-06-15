@@ -22,27 +22,27 @@ const readingTime = Math.ceil(Astro.props.rawContent?.split(' ').length / 200) |
     <article class="max-w-3xl mx-auto px-4 py-16">
       <header class="mb-12">
         <div class="mb-6">
-          <time class="font-mono text-sm uppercase tracking-wide text-gray-500 dark:text-gray-500">
+          <time class="font-grotesk text-sm uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
             {frontmatter.date.toLocaleDateString('en-US', { 
               year: 'numeric', 
               month: 'long', 
               day: 'numeric' 
             })}
           </time>
-          <span class="mx-2 text-gray-400">•</span>
-          <span class="font-mono text-sm uppercase tracking-wide text-gray-500 dark:text-gray-500">
+          <span class="mx-2 text-neutral-400">•</span>
+          <span class="font-grotesk text-sm uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
             {readingTime} min read
           </span>
         </div>
         
-        <h1 class="font-mono text-4xl md:text-5xl font-bold leading-tight mb-6">
+        <h1 class="font-grotesk text-4xl md:text-5xl font-bold leading-tight mb-6 text-brutalist">
           {frontmatter.title}
         </h1>
         
         {frontmatter.tags && (
           <div class="flex flex-wrap gap-2">
             {frontmatter.tags.map((tag) => (
-              <span class="font-mono text-xs uppercase tracking-wide px-3 py-1 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800">
+              <span class="font-grotesk text-xs uppercase tracking-wide px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
                 {tag}
               </span>
             ))}
@@ -50,28 +50,28 @@ const readingTime = Math.ceil(Astro.props.rawContent?.split(' ').length / 200) |
         )}
       </header>
       
-      <div class="prose prose-lg max-w-none dark:prose-invert
-                  prose-headings:font-mono prose-headings:font-bold prose-headings:uppercase prose-headings:tracking-wide
+      <div class="prose prose-lg max-w-none dark:prose-invert font-grotesk
+                  prose-headings:font-grotesk prose-headings:font-bold prose-headings:uppercase prose-headings:tracking-wide
                   prose-h2:text-2xl prose-h3:text-xl
-                  prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300
-                  prose-li:text-gray-700 dark:prose-li:text-gray-300
-                  prose-code:bg-gray-100 dark:prose-code:bg-gray-900 
-                  prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                  prose-pre:bg-gray-900 dark:prose-pre:bg-gray-100
-                  prose-a:text-pink-500 hover:prose-a:text-pink-600
-                  prose-blockquote:border-l-pink-500">
+                  prose-p:leading-relaxed prose-p:text-neutral-700 dark:prose-p:text-neutral-300
+                  prose-li:text-neutral-700 dark:prose-li:text-neutral-300
+                  prose-code:bg-neutral-100 dark:prose-code:bg-neutral-800 
+                  prose-code:px-1 prose-code:py-0.5 prose-code:rounded-none prose-code:border prose-code:border-neutral-300 dark:prose-code:border-neutral-600
+                  prose-pre:bg-neutral-900 dark:prose-pre:bg-neutral-100 prose-pre:rounded-none prose-pre:border prose-pre:border-neutral-300 dark:prose-pre:border-neutral-600
+                  prose-a:text-neutral-600 dark:prose-a:text-neutral-400 hover:prose-a:text-neutral-900 dark:hover:prose-a:text-neutral-100
+                  prose-blockquote:border-l-neutral-600 dark:prose-blockquote:border-l-neutral-400">
         <slot />
       </div>
       
-      <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
+      <footer class="mt-16 pt-8 border-t border-neutral-200 dark:border-neutral-700">
         <div class="flex justify-between items-center">
-          <a href="/blog" class="font-mono text-sm uppercase tracking-wide hover:text-pink-500 transition-colors">
+          <a href="/journal" class="font-grotesk text-sm uppercase tracking-wide hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors">
             ← Back to Journal
           </a>
           
           <div class="flex space-x-4">
             <button onclick="navigator.share && navigator.share({title: document.title, url: window.location.href})" 
-                    class="font-mono text-sm uppercase tracking-wide hover:text-pink-500 transition-colors">
+                    class="font-grotesk text-sm uppercase tracking-wide hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors">
               Share
             </button>
           </div>
